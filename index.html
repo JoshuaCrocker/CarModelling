@@ -10,12 +10,13 @@
     <script src="src/Car.js"></script>
     <script>
       var car = new Car();
+      car.heading = new Vector2D(1, 1);
 
-      // setInterval(function() {
-      //   var vel = car.getVelocity();
-      //
-      //   console.log("[" + vel.getX() + ", " + vel.getY() + "]");
-      // }, 500);
+      setInterval(function() {
+        var vel = car.getVelocity();
+
+        console.log("[" + vel.getX() + ", " + vel.getY() + "]");
+      }, 100);
     </script>
   </body>
 </html>

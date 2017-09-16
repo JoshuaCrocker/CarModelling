@@ -110,8 +110,8 @@ describe('Car', function() {
 
       var vel = c.getVelocity();
 
-      (vel.getX()).should.be.approximately(1.347, 0.001).and.be.a.Number();
-      (vel.getY()).should.be.approximately(-1.118, 0.001).and.be.a.Number();
+      (vel.getX()).should.be.approximately(4.336, 0.001).and.be.a.Number();
+      (vel.getY()).should.be.approximately(2.628, 0.001).and.be.a.Number();
     });
   });
 });

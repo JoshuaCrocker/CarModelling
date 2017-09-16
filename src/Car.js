@@ -67,8 +67,8 @@ function Car () {
     var acceleration = this.getAcceleration();
 
     this.currentVelocity = new Vector2D(
-      oldVelocity.getX() * acceleration.getX(),
-      oldVelocity.getY() * acceleration.getY()
+      oldVelocity.getX() + acceleration.getX(),
+      oldVelocity.getY() + acceleration.getY()
     );
 
     return this.currentVelocity;
