@@ -1,6 +1,6 @@
 function Vector2D(x, y) {
-  if (x === undefined) console.error("x is undefined");
-  if (y === undefined) console.error("y is undefined");
+  if (x === undefined) x = 0;
+  if (y === undefined) y = 0;
 
   var vector = [x, y];
 
