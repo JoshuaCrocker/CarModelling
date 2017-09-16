@@ -43,6 +43,20 @@ describe('Car', function() {
     });
   });
 
+  describe('#getBrakingForce()', function() {
+    it('should have a BRAKE_COEFF of 0.05', function() {
+      var c = new Car();
+      c.should.have.property('BRAKE_COEFF', 0.05);
+    });
+
+    it('should calculate the braking force', function() {
+      var c = new Car();
+
+      c.getBrakingForce().getX().should.be.exactly(-5);
+      c.getBrakingForce().getY().should.be.exactly(-5);
+    });
+  });
+
   describe('#getDragForce()', function() {
     it('should have a DRAG property (value: 0.4257)', function() {
       var c = new Car();
@@ -91,6 +105,26 @@ describe('Car', function() {
       (c.getLongitudinalForce().getX()).should.be.approximately(longitudinalX, 0.001).and.be.a.Number();
       (c.getLongitudinalForce().getY()).should.be.approximately(longitudinalY, 0.001).and.be.a.Number();
     });
+
+    it('should adjust when braking', function() {
+      var c = new Car();
+      c.currentVelocity = new Vector2D(4, 3);
+      c.setBraking(true);
+
+      var brakeX = -5;
+      var brakeY = -5;
+      var dragX = -8.514;
+      var dragY = -6.3855;
+      var rollX = -51.084;
+      var rollY = -38.313;
+
+      var longitudinalX = brakeX + dragX + rollX;
+      var longitudinalY = brakeY + dragY + rollY;
+
+      c.isBraking().should.be.true();
+      (c.getLongitudinalForce().getX()).should.be.approximately(longitudinalX, 0.001).and.be.a.Number();
+      (c.getLongitudinalForce().getY()).should.be.approximately(longitudinalY, 0.001).and.be.a.Number();
+    });
   });
 
   describe('#getAcceleration()', function() {
@@ -112,6 +146,36 @@ describe('Car', function() {
 
       (vel.getX()).should.be.approximately(4.336, 0.001).and.be.a.Number();
       (vel.getY()).should.be.approximately(2.628, 0.001).and.be.a.Number();
+    });
+
+    it('should not go negative when braking', function() {
+      var c = new Car();
+      c.setBraking(true);
+
+      var velocity = c.getVelocity();
+      velocity.getX().should.be.exactly(0).and.be.a.Number();
+      velocity.getY().should.be.exactly(0).and.be.a.Number();
+    });
+  });
+
+  describe('#isBraking()', function() {
+    it('should return `true` when the car is braking', function() {
+      var c = new Car();
+
+      c.isBraking().should.be.false();
+      c.brake = true;
+      c.isBraking().should.be.true();
+    });
+  });
+
+  describe('#setBraking()', function() {
+    it('can set the brake variable', function() {
+      var c = new Car();
+
+      c.setBraking(true);
+      c.brake.should.be.true();
+      c.setBraking(false);
+      c.brake.should.be.false();
     });
   });
 });

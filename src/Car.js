@@ -2,6 +2,7 @@ function Car () {
   this.DRAG = 0.5 * 0.3 * 2.2 * 1.29;
   this.ROLL_RESIST = 30 * this.DRAG;
   this.BASE_MASS = 100;
+  this.BRAKE_COEFF = 0.05;
 
   this.engineForce = 100; // Throttle? / Controlled by user
 
@@ -12,6 +13,16 @@ function Car () {
 
   // TODO braking
 
+  this.brake = false;
+
+  this.isBraking = function() {
+    return this.brake;
+  }
+
+  this.setBraking = function(braking) {
+    this.brake = braking ? true : false;
+  }
+
   this.getMass = function() {
     return this.BASE_MASS + this.fuelMass;
   }
@@ -20,6 +31,13 @@ function Car () {
     return new Vector2D(
       this.heading.unit().getX() * this.engineForce,
       this.heading.unit().getY() * this.engineForce
+    );
+  }
+
+  this.getBrakingForce = function() {
+    return new Vector2D(
+      (-1) * this.engineForce * this.BRAKE_COEFF,
+      (-1) * this.engineForce * this.BRAKE_COEFF,
     );
   }
 
@@ -43,7 +61,14 @@ function Car () {
   }
 
   this.getLongitudinalForce = function() {
-    var traction = this.getTractionForce();
+    var traction;
+
+    if (this.isBraking()) {
+      traction = this.getBrakingForce();
+    } else {
+      traction = this.getTractionForce();
+    }
+
     var drag = this.getDragForce();
     var rr = this.getRollingResistanceForce();
 
@@ -70,6 +95,9 @@ function Car () {
       oldVelocity.getX() + acceleration.getX(),
       oldVelocity.getY() + acceleration.getY()
     );
+
+    if (this.currentVelocity.getX() < 0) this.currentVelocity.setX(0);
+    if (this.currentVelocity.getY() < 0) this.currentVelocity.setY(0);
 
     return this.currentVelocity;
   }
