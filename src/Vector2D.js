@@ -35,6 +35,9 @@ function Vector2D(x, y) {
     var ux = this.getX() / this.magnitude();
     var uy = this.getY() / this.magnitude();
 
-    return new Vector2D(ux, uy);
+    return new Vector2D(
+      isNaN(ux) ? 0 : ux,
+      isNaN(uy) ? 0 : uy
+    );
   }
 }

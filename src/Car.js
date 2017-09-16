@@ -3,10 +3,10 @@ function Car () {
   this.ROLL_RESIST = 30 * this.DRAG;
   this.BASE_MASS = 100;
 
-  this.engineForce = 1; // Throttle? / Controlled by user
+  this.engineForce = 100; // Throttle? / Controlled by user
 
-  var currentVelocity = new Vector2D(0, 0);
-  this.heading = new Vector2D(0, 0);
+  this.currentVelocity = new Vector2D(0, 0);
+  this.heading = new Vector2D(1, 0);
 
   this.fuelMass = 20;
 
@@ -15,16 +15,16 @@ function Car () {
   this.getMass = function() {
     return this.BASE_MASS + this.fuelMass;
   }
-  
+
   this.getTractionForce = function() {
     return new Vector2D(
-      this.heading.unit() * this.engineForce,
-      this.heading.unit() * this.engineForce
+      this.heading.unit().getX() * this.engineForce,
+      this.heading.unit().getY() * this.engineForce
     );
   }
 
   this.getDragForce = function() {
-    var velocity = currentVelocity;
+    var velocity = this.currentVelocity;
     var speed = velocity.magnitude();
 
     return new Vector2D(
@@ -34,11 +34,11 @@ function Car () {
   }
 
   this.getRollingResistanceForce = function() {
-    var velocity = currentVelocity;
+    var velocity = this.currentVelocity;
 
     return new Vector2D(
-      this.ROLL_RESIST * velocity.getX(),
-      this.ROLL_RESIST * velocity.getY()
+      (-1) * this.ROLL_RESIST * velocity.getX(),
+      (-1) * this.ROLL_RESIST * velocity.getY()
     );
   }
 
@@ -63,14 +63,14 @@ function Car () {
   }
 
   this.getVelocity = function() {
-    var oldVelocity = currentVelocity;
+    var oldVelocity = this.currentVelocity;
     var acceleration = this.getAcceleration();
 
-    currentVelocity = new Vector2D(
-      oldVelocity.getX() * acceleration,
-      oldVelocity.getY() * acceleration
+    this.currentVelocity = new Vector2D(
+      oldVelocity.getX() * acceleration.getX(),
+      oldVelocity.getY() * acceleration.getY()
     );
 
-    return currentVelocity;
+    return this.currentVelocity;
   }
 }
